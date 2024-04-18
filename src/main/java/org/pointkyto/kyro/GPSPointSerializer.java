@@ -10,6 +10,7 @@ import java.sql.Timestamp;
 import com.esotericsoftware.kryo.Serializer;
 
 public class GPSPointSerializer extends Serializer<GPSPoint> {
+
     @Override
     public void write(Kryo kryo, Output output, GPSPoint point) {
         output.writeLong(point.getTime().getTime());

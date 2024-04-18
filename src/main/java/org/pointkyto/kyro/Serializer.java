@@ -15,8 +15,8 @@ public class Serializer {
 
     public Serializer() {
         kryo = new Kryo();
-        kryo.register(GPSPointSerializer.class);
         /*
+        kryo.register(GPSPointSerializer.class);
         kryo.register(GPSPoint.class);
         kryo.register(HashMap.class);
         kryo.register(org.locationtech.jts.geom.Coordinate[].class);

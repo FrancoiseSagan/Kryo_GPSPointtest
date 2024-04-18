@@ -1,6 +1,6 @@
 package org.pointkyto;
 
-import org.pointkyto.kyro.GPSPointSerializer;
+import org.pointkyto.kryo.GPSPointSerializer;
 import org.pointkyto.model.GPSPoint;
 
 import java.sql.Timestamp;

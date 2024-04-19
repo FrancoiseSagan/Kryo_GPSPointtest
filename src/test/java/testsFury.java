@@ -1,17 +1,18 @@
-import org.junit.Test;
+import org.apache.fury.Fury;
+import org.apache.fury.config.Language;
 import org.junit.Assert;
+import org.junit.Test;
 import org.pointkyto.model.Attribute;
 import org.pointkyto.model.GPSPoint;
-import org.pointkyto.kryo.Serializer;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class TestSerializer {
+public class testsFury {
     @Test
-    public void testSerializationDeserialization() {
+    public void test_fury() {
         GPSPoint[] points = new GPSPoint[5000];
 
         Random random = new Random();
@@ -30,18 +31,42 @@ public class TestSerializer {
             points[i] = new GPSPoint(new Timestamp(System.currentTimeMillis()), lng, lat, attributes);
         }
 
-        Serializer serializer = new Serializer();
+        Fury fury = Fury.builder().withLanguage(Language.JAVA)
+                // Allow to deserialize objects unknown types, more flexible
+                // but may be insecure if the classes contains malicious code.
+                .requireClassRegistration(true)
+                .build();
+
+        fury.register(GPSPoint.class);
+        fury.register(GPSPoint.class);
+        fury.register(HashMap.class);
+        fury.register(org.pointkyto.model.GPSPoint[].class);
+        fury.register(org.locationtech.jts.geom.Coordinate[].class);
+        fury.register(org.locationtech.jts.geom.impl.CoordinateArraySequence.class);
+        fury.register(org.locationtech.jts.geom.Coordinate.class);
+        fury.register(org.pointkyto.model.Attribute.class);
+        fury.register(org.locationtech.jts.geom.GeometryFactory.class);
+        fury.register(org.locationtech.jts.geom.impl.CoordinateArraySequenceFactory.class);
+        fury.register(org.locationtech.jts.geom.PrecisionModel.class);
+        fury.register(org.locationtech.jts.geom.PrecisionModel.Type.class);
+        fury.register(java.sql.Timestamp.class);
 
         long startTimeSerialize = System.currentTimeMillis();
-        byte[] serializedData = serializer.serialize(points);
+
+        byte[] serializedData = fury.serialize(points);
+
         long endTimeSerialize = System.currentTimeMillis();
+
         System.out.println("Serialization time: " + (endTimeSerialize - startTimeSerialize) + " ms");
 
         System.out.println("Serialized data length: " + serializedData.length);
 
         long startTimeDeserialize = System.currentTimeMillis();
-        GPSPoint[] deserializedPoints = serializer.deserialize(serializedData);
+
+        GPSPoint[] deserializedPoints = (GPSPoint[]) fury.deserialize(serializedData);
+
         long endTimeDeserialize = System.currentTimeMillis();
+
         System.out.println("Deserialization time: " + (endTimeDeserialize - startTimeDeserialize) + " ms");
 
         Assert.assertEquals(points[0], deserializedPoints[0]);
@@ -50,5 +75,3 @@ public class TestSerializer {
         Assert.assertEquals(points[4999], deserializedPoints[4999]);
     }
 }
-
-

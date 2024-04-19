@@ -16,9 +16,11 @@ public class Serializer {
         kryox = new Kryox();
         kryox.register(GPSPoint.class);
         kryox.register(HashMap.class);
+        kryox.register(org.pointkyto.model.GPSPoint[].class);
         kryox.register(org.locationtech.jts.geom.Coordinate[].class);
         kryox.register(org.locationtech.jts.geom.impl.CoordinateArraySequence.class);
         kryox.register(org.locationtech.jts.geom.Coordinate.class);
+        kryox.register(org.pointkyto.model.Attribute.class);
         kryox.register(org.locationtech.jts.geom.GeometryFactory.class);
         kryox.register(org.locationtech.jts.geom.impl.CoordinateArraySequenceFactory.class);
         kryox.register(org.locationtech.jts.geom.PrecisionModel.class);
@@ -26,21 +28,22 @@ public class Serializer {
         kryox.register(java.sql.Timestamp.class);
     }
 
-    public byte[] serialize(GPSPoint obj) {
+    public byte[] serialize(GPSPoint[] objArray) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         Output output = new Output(byteArrayOutputStream);
-        kryox.writeObject(output, obj);
+        kryox.writeObject(output, objArray);
         output.close();
         return byteArrayOutputStream.toByteArray();
     }
 
-    public GPSPoint deserialize(byte[] data) {
+    public GPSPoint[] deserialize(byte[] data) {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data);
         Input input = new Input(byteArrayInputStream);
-        GPSPoint obj = kryox.readObject(input, GPSPoint.class);
+        GPSPoint[] objArray = kryox.readObject(input, GPSPoint[].class);
         input.close();
-        return obj;
+        return objArray;
     }
+
 }
 
 

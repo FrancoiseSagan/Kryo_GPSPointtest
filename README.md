@@ -6,7 +6,7 @@ Class GPSPoint can't be serialized by kyro's default serializer
 
 #### Reason&Improvement
 
-Because kryo requires that types and all types that depend on them have parameterless constructors
+Because kryo requires that types and all types that they depend on have parameterless constructors
 
 However, overwriting the logic of kryo can fix it, by accessing the information of .class with the help of reflection when in deserialization:
 

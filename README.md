@@ -66,7 +66,7 @@ public class Kryox extends Kryo {
 
 #### Present test
 
-When surfing in Zhihu, I found a serializer made by Alipay's employees, and he claims it is about 25 times faster than kryo, however:
+When surfing in Zhihu, I found a serializer made by Alipay's employee, and he claims it is about 25 times faster than kryo, however:
 
 (maybe it doesn't suit our GPSPoint object :)  )
 
